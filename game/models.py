@@ -19,6 +19,7 @@ class Game(models.Model):
 class Character(models.Model):
     character_name = models.CharField(verbose_name='Имя персонажа', max_length=100)
     character_img = models.ImageField(verbose_name='Аватар', blank=True, null=True, upload_to='media/characters')
+    is_active = models.BooleanField(default=True, verbose_name="Активный")
 
     def __str__(self):
         return self.character_name

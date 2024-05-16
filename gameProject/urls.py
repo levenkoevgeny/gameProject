@@ -11,6 +11,7 @@ router = routers.DefaultRouter()
 
 router.register(r'answers', game_views.AnswerViewSet)
 router.register(r'questions', game_views.QuestionViewSet)
+router.register(r'results', game_views.GameResultViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
