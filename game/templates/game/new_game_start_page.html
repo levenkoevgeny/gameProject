@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}<title>{{ game.game_title }}</title>{% endblock %}
+{% block content %}
+
+    <div class="text-center my-4">
+    <h1>{{ game.game_title }}</h1>
+    </div>
+
+    <div class="container d-flex justify-content-center">
+        <div class="text-center" style="width: 700px;">
+
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="id_user_name"
+                       placeholder="Введите имя и нажмите кнопку старт ...">
+                <label for="floatingInput">Введите имя и нажмите кнопку старт...</label>
+            </div>
+
+            <img src="{{ game.task_img.url }}" alt="Стартовая страница" width="100%"
+                 onclick="nextPage({{ game.id }})">
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block own_js %}
+    <script>
+        async function nextPage(game_id) {
+            let username = $('#id_user_name').val()
+            if (username === '') {
+                alert('Введите имя!')
+                $('#id_user_name').focus()
+                return
+            } else {
+                await fetch(`/api/write-to-session?user_name=${username}`);
+                $('#id_user_name').val('')
+                window.location.href = `/game/${game_id}/characters`
+            }
+        }
+    </script>
+{% endblock %}
