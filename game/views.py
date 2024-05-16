@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.permissions import AllowAny
 
 from .models import Game, Character, Question, Answer, GameResult
 from .serializers import AnswerSerializer, QuestionSerializer, GameResultSerializer
@@ -35,7 +34,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class GameResultViewSet(viewsets.ModelViewSet):
     queryset = GameResult.objects.all()
     serializer_class = GameResultSerializer
-    permission_classes = [AllowAny]
+
     def destroy(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         super().destroy(*args, **kwargs)
