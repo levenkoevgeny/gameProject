@@ -4,10 +4,8 @@
 {% block content %}
 
     <div class="container-fluid mt-2">
-
         <div></div>
         <div class="text-center">
-
             <h1>{{ game.game_title }}</h1>
             <h3 id="id_user_name"></h3>
             <h3 id="id_score"></h3>
@@ -16,21 +14,21 @@
         {% if question %}
             <div>
                 <div class="text-center">
-                    <img src="{{ question.question_img.url }}" alt="" width="300px;" height="300px;"
-                         id="id_question_image">
+                    {% if question.question_img %}
+                        <img src="{{ question.question_img.url }}" alt="" width="300px;" height="300px;"
+                             id="id_question_image">
+                    {% endif %}
                     <p id="img_description" class="fs-5"></p>
                 </div>
                 <h3 id="id_question_text">{{ question.question_text }}</h3><br><br>
-                <div id="answers_div">
+                <div id="answers_div" class="d-flex justify-content-center">
                     {% for answer in answers %}
-                        <button class="btn btn-light my-2"
+                        <button class="btn btn-light m-2"
                                 onclick="changeQuestion({{ answer.id }})">{{ answer.answer_text }}</button>
                         <br>
                     {% endfor %}
                 </div>
             </div>
-        {% else %}
-            Для этого персонажа нет вопросов ))
         {% endif %}
     </div>
 
@@ -70,7 +68,7 @@
             if (nextQuestionData.is_game_over) {
                 window.location.replace('/game/game-over')
             } else {
-                const nextQuestion = nextQuestionData.next_question
+                const nextQuestion = nextQuestionData.next_question;
                 $("#id_question_image").attr("src", nextQuestion.question_img);
                 $("#id_question_text").html(nextQuestion.question_text);
                 if (nextQuestion.question_img_description !== '') {
@@ -78,13 +76,10 @@
                 }
                 let answer_div = $("#answers_div").html("");
                 answer_div.html("");
-
-
                 const shuffledAnswers = shuffle(nextQuestion.answers);
-
                 shuffledAnswers.map(answer => {
                         let newAnswerButton = $("<button></button>")
-                        newAnswerButton.addClass('btn btn-light my-2')
+                        newAnswerButton.addClass('btn btn-light m-2')
                         newAnswerButton.html(answer.answer_text)
                         newAnswerButton.on("click", function () {
                             changeQuestion(answer.id)
@@ -93,10 +88,7 @@
                         answer_div.append('<br>')
                     }
                 )
-
             }
-
-
         }
 
         const shuffle = (array) => {

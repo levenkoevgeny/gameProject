@@ -14,7 +14,6 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['id', 'game',
-                  'character',
                   'is_first_question_in_game', 'question_text', 'question_number',
                   'question_img', 'question_img_description', 'answers']
         depth = 2

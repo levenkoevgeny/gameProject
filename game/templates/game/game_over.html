@@ -29,11 +29,11 @@
             $('#id_score').html(`Текущий счет - ${userData.score}`)
 
             if (parseInt(userData.score) > 17) {
-                $('#final_image').attr("src", 'http://localhost:8000/media/media/game_won.jpg');
-                $('#result_text').html('Красава')
+                $('#final_image').attr("src", '/media/media/game_won.jpg');
+                $('#result_text').html('Вы выиграли')
             } else {
-                $('#final_image').attr("src", 'http://localhost:8000/media/media/game_lost.jpg');
-                $('#result_text').html('Капец ты лох')
+                $('#final_image').attr("src", '/media/media/game_lost.jpg');
+                $('#result_text').html('Вы проиграли')
             }
         });
     </script>

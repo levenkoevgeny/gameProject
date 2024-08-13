@@ -4,7 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .models import Game, Character, Question, Answer, GameResult
+from .models import Game, Question, Answer, GameResult
 from .serializers import AnswerSerializer, QuestionSerializer, GameResultSerializer
 from .filters import GameResultFilter
 import datetime
@@ -51,26 +51,28 @@ def new_game_start_page(request, game_id):
     return render(request, 'game/new_game_start_page.html', {'game': game})
 
 
-def characters_page(request, game_id):
-    characters = Character.objects.all()
-    return render(request, 'game/characters.html', {'characters': characters, 'game_id': game_id})
-
-
 def game_running(request):
     context = {}
     if 'game' in request.GET:
         game = get_object_or_404(Game, pk=request.GET.get("game"))
         context['game'] = game
+        question = Question.objects.filter(game=game, is_first_question_in_game=True).first()
+        if question:
+            context['question'] = question
+            context['answers'] = Answer.objects.filter(question=question)
+        else:
+            pass
 
-        if 'character' in request.GET:
-            question = Question.objects.filter(game=game, character_id=request.GET.get("character"),
-                                               question_number=1).first()
-            if question:
-                context['question'] = question
-                context['answers'] = Answer.objects.filter(question=question)
-            else:
-                pass
-    request.session['score'] = 0
+
+        # if 'character' in request.GET:
+        #     question = Question.objects.filter(game=game, character_id=request.GET.get("character"),
+        #                                        question_number=1).first()
+            # if question:
+            #     context['question'] = question
+            #     context['answers'] = Answer.objects.filter(question=question)
+            # else:
+            #     pass
+        request.session['score'] = 0
     return render(request, 'game/game_main_page.html', context)
 
 
@@ -89,7 +91,7 @@ def get_user_session(request):
 
 
 @api_view(['GET'])
-def get_next_question_or_gave_over(request, pk):
+def get_next_question_or_game_over(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
     request.session['score'] = request.session['score'] + answer.score
     if answer.next_question:

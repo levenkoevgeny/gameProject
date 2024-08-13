@@ -4,22 +4,23 @@
 {% block content %}
 
     <div class="text-center my-4">
-    <h1>{{ game.game_title }}</h1>
+        <h1>{{ game.game_title }}</h1>
     </div>
 
     <div class="container d-flex justify-content-center">
-        <div class="text-center" style="width: 700px;">
-
-
+        <div class="text-center">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="id_user_name"
                        placeholder="Введите имя и нажмите кнопку старт ...">
-                <label for="floatingInput">Введите имя и нажмите кнопку старт...</label>
+                <label for="floatingInput">Введите имя и нажмите кнопку "Начать игру"</label>
             </div>
-
-            <img src="{{ game.task_img.url }}" alt="Стартовая страница" width="100%"
-                 onclick="nextPage({{ game.id }})">
-
+            {% if game.task_img %}
+                <p class="fs-5 text-start" style="text-indent: 50px">{{ game.task_text }}</p>
+                <img src="{{ game.task_img.url }}" alt="Стартовая страница" width="400px"><br><br>
+                <button onclick="nextPage({{ game.id }})" class="btn btn-primary">Начать игру</button>
+            {% else %}
+                <button onclick="nextPage({{ game.id }})" class="btn btn-primary">Начать игру</button>
+            {% endif %}
         </div>
     </div>
 
@@ -37,7 +38,7 @@
             } else {
                 await fetch(`/api/write-to-session?user_name=${username}`);
                 $('#id_user_name').val('')
-                window.location.href = `/game/${game_id}/characters`
+                window.location.href = `/game/running?game=${game_id}`
             }
         }
     </script>
