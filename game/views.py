@@ -94,6 +94,7 @@ def get_user_session(request):
 def get_next_question_or_game_over(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
     request.session['score'] = request.session['score'] + answer.score
+
     if answer.next_question:
         serializer = QuestionSerializer(answer.next_question)
         return Response({'is_game_over': False, 'next_question': serializer.data}, status=status.HTTP_200_OK)
