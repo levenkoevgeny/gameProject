@@ -4,6 +4,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
+COPY . /code/
 COPY --chmod=777 ./entrypoint.sh /code/
 ENTRYPOINT ["/code/entrypoint.sh"]
 
