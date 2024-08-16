@@ -6,9 +6,9 @@ from game.models import Game, Question, Answer
 
 
 def init_questions(apps, schema_editor):
-    Game.objects.delete()
-    Question.objects.delete()
-    Answer.objects.delete()
+    Game.objects.all().delete()
+    Question.objects.all().delete()
+    Answer.objects.all().delete()
     game = Game.objects.create(game_title='Игра 1')
     Question.objects.create(game=game,
                             question_text="Вы сотрудник НЦБ Интерпола в Республике Беларусь и получаете посредством информационной системы I-24/7 розыскной циркуляр "
