@@ -40,18 +40,23 @@
                     <a class="nav-link active" aria-current="page" href="/">Главная</a>
                 </li>
             </ul>
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ user.last_name }} {{ user.first_name }}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" onclick="sendLogOut()" style="cursor: pointer">Выход из системы</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            {% if user.is_authenticated %}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }} {{ user.first_name }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" onclick="sendLogOut()" style="cursor: pointer">Выход из
+                                системы</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            {% else %}
+            {% endif %}
+
         </div>
     </div>
 </nav>

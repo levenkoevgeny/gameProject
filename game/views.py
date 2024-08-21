@@ -95,14 +95,27 @@ def get_next_question_or_game_over(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
     request.session['score'] = request.session['score'] + answer.score
 
-    if answer.next_question:
-        serializer = QuestionSerializer(answer.next_question)
-        return Response({'is_game_over': False, 'next_question': serializer.data}, status=status.HTTP_200_OK)
-    else:
+    response_data = {}
+
+    # game is over
+    if answer.is_game_over:
+        response_data['game_status'] = 1
         result = GameResult(game=answer.question.game, last_name=request.session.get('user_name', 'No data'),
                             score=request.session.get('score', 0), date_time_created=datetime.datetime.now())
         result.save()
-        return Response({'is_game_over': True}, status=status.HTTP_200_OK)
+    # game has next question
+    elif answer.next_question:
+        serializer = QuestionSerializer(answer.next_question)
+        response_data['game_status'] = 2
+        response_data['next_question'] = serializer.data
+    # answer don't have next question
+    else:
+        response_data['game_status'] = 0
+        if answer.score > 0:
+            response_data['increase'] = True
+        else:
+            response_data['increase'] = False
+    return Response(response_data, status=status.HTTP_200_OK)
 
 
 def game_over(request):

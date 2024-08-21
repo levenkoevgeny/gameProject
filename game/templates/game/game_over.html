@@ -10,9 +10,9 @@
             <h3 id="id_score"></h3>
 
             <h3 id="result_text"></h3>
-             <img id="final_image" src="" alt="Финальная картинка" width="600px;"> <br> <br>
+             <img id="final_image" src="" alt="Финальная картинка" width="800px;"> <br> <br>
 
-            <a href="/" class="btn btn-primary">Начать заново</a>
+{#            <a href="/" class="btn btn-primary">Начать заново</a>#}
 
         </div>
     </div>
@@ -28,12 +28,21 @@
             $('#id_user_name').html(`Вы играете с именем - ${userData.user_name}`)
             $('#id_score').html(`Текущий счет - ${userData.score}`)
 
-            if (parseInt(userData.score) > 17) {
-                $('#final_image').attr("src", '/media/media/game_won.jpg');
-                $('#result_text').html('Вы выиграли')
-            } else {
-                $('#final_image').attr("src", '/media/media/game_lost.jpg');
-                $('#result_text').html('Вы проиграли')
+            if (parseInt(userData.score) >= 15 && parseInt(userData.score)<=16) {
+                $('#final_image').attr("src", '/media/media/result/14.jpg');
+                $('#result_text').html('Вы настолько хорошо справились с поставленной задачей, что Вас пригласили работать в Интерпол')
+            } else if (parseInt(userData.score) >= 11 && parseInt(userData.score)<=14) {
+                $('#final_image').attr("src", '/media/media/result/15.jpg');
+                $('#result_text').html('Вы достаточно неплохо справились с задачей и начальник выразил Вам устную благодарность')
+            } else if (parseInt(userData.score) >= 7 && parseInt(userData.score)<=10) {
+                $('#final_image').attr("src", '/media/media/result/16.jpg');
+                $('#result_text').html('Вы допустили ряд ошибок и были лишены премии за месяц')
+            } else if (parseInt(userData.score) >= 4 && parseInt(userData.score)<=6) {
+                $('#final_image').attr("src", '/media/media/result/17.jpg');
+                $('#result_text').html('Вы допустили ряд серьезных недоработок и ошибок, в связи с чем Вам объявлен выговор!')
+            } else if (parseInt(userData.score) >= 0 && parseInt(userData.score)<=3) {
+                $('#final_image').attr("src", '/media/media/result/18.jpg');
+                $('#result_text').html('Вы не справились с поставленной задачей и были уволены!')
             }
         });
     </script>

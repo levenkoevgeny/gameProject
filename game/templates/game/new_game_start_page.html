@@ -8,7 +8,7 @@
     </div>
 
     <div class="container d-flex justify-content-center">
-        <div class="text-center">
+        <div class="text-center" style="width: 100%">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="id_user_name"
                        placeholder="Введите имя и нажмите кнопку старт ...">
@@ -19,7 +19,7 @@
                 <img src="{{ game.task_img.url }}" alt="Стартовая страница" width="400px"><br><br>
                 <button onclick="nextPage({{ game.id }})" class="btn btn-primary">Начать игру</button>
             {% else %}
-                <button onclick="nextPage({{ game.id }})" class="btn btn-primary">Начать игру</button>
+                <button onclick="nextPage({{ game.id }})" class="btn btn-primary" style="width: 100%; height: 50px">Начать игру</button>
             {% endif %}
         </div>
     </div>

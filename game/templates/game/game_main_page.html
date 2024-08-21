@@ -3,27 +3,71 @@
 {% block title %}<title>{{ game.game_title }}</title>{% endblock %}
 {% block content %}
 
+
+<style>
+.error-answer-decrease {
+animation-name: movingBoxDecrease;
+animation-duration: 1000ms;
+}
+
+.error-answer-increase {
+animation-name: movingBoxIncrease;
+animation-duration: 1000ms;
+}
+
+@keyframes movingBoxDecrease {
+50% {
+transform: scale(1.2);
+color: red;
+}
+
+100% {
+transform: scale(1);
+color: black;
+}
+}
+
+@keyframes movingBoxIncrease {
+50% {
+transform: scale(1.2);
+color: darkblue;
+}
+
+100% {
+transform: scale(1);
+color: black;
+}
+}
+</style>
+
+{#<div class="box">#}
+{#  <div>Кликни и начнется анимация</div>#}
+{#</div>#}
+
+
+
+
     <div class="container-fluid mt-2">
         <div></div>
         <div class="text-center">
             <h1>{{ game.game_title }}</h1>
             <h3 id="id_user_name"></h3>
-            <h3 id="id_score"></h3>
+            <h3 class="mb-0" id="id_score"></h3>
         </div>
         <br>
         {% if question %}
             <div>
                 <div class="text-center">
                     {% if question.question_img %}
-                        <img src="{{ question.question_img.url }}" alt="" width="300px;" height="300px;"
+                        <img src="{{ question.question_img.url }}" alt="" width="600px;" height="400px;"
                              id="id_question_image">
                     {% endif %}
                     <p id="img_description" class="fs-5"></p>
                 </div>
-                <h3 id="id_question_text">{{ question.question_text }}</h3><br><br>
+                <h3 class="fs-5 mb-3" id="id_question_text">{{ question.question_text }}</h3>
                 <div id="answers_div" class="d-flex justify-content-center">
                     {% for answer in answers %}
-                        <button class="btn btn-light m-2"
+                        <button class="btn btn-light m-2" id="answer_button_{{ answer.id }}"
                                 onclick="changeQuestion({{ answer.id }})">{{ answer.answer_text }}</button>
                         <br>
                     {% endfor %}
@@ -36,12 +80,35 @@
 {% endblock %}
 
 {% block own_js %}
+
+<script>
+
+
+$("#animation_button").on("click", function() {
+  box.classList.add('error-answer-increase');
+});
+
+let box = document.querySelector('#animation_text');
+// Отслеживаем окончание анимации
+box.addEventListener("animationend", AnimationHandler, false);
+
+function AnimationHandler () {
+  // Удаляем класс с анимацией
+  box.classList.remove('error-answer-increase');
+}
+
+
+
+
+</script>
+
+
     <script>
         window.addEventListener("load", async (event) => {
             const response = await fetch('/api/get_user_session');
             const userData = await response.json()
-            $('#id_user_name').html(`Вы играете с именем - ${userData.user_name}`)
-            $('#id_score').html(`Текущий счет - ${userData.score}`)
+            $('#id_user_name').text(`Вы играете с именем: ${userData.user_name}`)
+            $('#id_score').text(`Текущий счет: ${userData.score}`)
         });
     </script>
     <script>
@@ -57,7 +124,7 @@
         async function updateUserDataFromSession() {
             const response = await fetch('/api/get_user_session');
             const userData = await response.json()
-            $('#id_score').html(`Текущий счет - ${userData.score}`)
+            $('#id_score').text(`Текущий счет: ${userData.score}`)
         }
 
         async function changeQuestion(answerId) {
@@ -65,9 +132,12 @@
             const nextQuestionData = await getNextQuestion(answerId);
             await updateUserDataFromSession()
 
-            if (nextQuestionData.is_game_over) {
+             {#$("#id_score").removeClass('error-answer-increase')#}
+             {#$("#id_score").removeClass('error-answer-decrease')#}
+
+            if (nextQuestionData.game_status === 1) {
                 window.location.replace('/game/game-over')
-            } else {
+            } else if (nextQuestionData.game_status === 2) {
                 const nextQuestion = nextQuestionData.next_question;
                 $("#id_question_image").attr("src", nextQuestion.question_img);
                 $("#id_question_text").html(nextQuestion.question_text);
@@ -79,6 +149,7 @@
                 const shuffledAnswers = shuffle(nextQuestion.answers);
                 shuffledAnswers.map(answer => {
                         let newAnswerButton = $("<button></button>")
+                        newAnswerButton.attr('id', `answer_button_${answer.id}`);
                         newAnswerButton.addClass('btn btn-light m-2')
                         newAnswerButton.html(answer.answer_text)
                         newAnswerButton.on("click", function () {
@@ -88,6 +159,24 @@
                         answer_div.append('<br>')
                     }
                 )
+            } else {
+                    if (nextQuestionData.increase) {
+                        let box = document.querySelector('#id_score');
+                        box.classList.add('error-answer-increase')
+                        box.addEventListener("animationend", AnimationHandlerIncrease, false);
+                        function AnimationHandlerIncrease () {
+                           box.classList.remove('error-answer-increase');
+                        }
+                } else {
+
+                    let box = document.querySelector('#id_score');
+                    box.classList.add('error-answer-decrease')
+                        box.addEventListener("animationend", AnimationHandlerDecrease, false);
+                        function AnimationHandlerDecrease () {
+                           box.classList.remove('error-answer-decrease');
+                        }
+                }
+                $(`#answer_button_${answerId}`).attr('disabled', 'disabled')
             }
         }
 

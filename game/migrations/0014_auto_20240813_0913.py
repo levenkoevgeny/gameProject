@@ -13,6 +13,7 @@ def init_questions(apps, schema_editor):
                             question_text="Вы сотрудник НЦБ Интерпола в Республике Беларусь и получаете посредством информационной системы I-24/7 розыскной циркуляр "
                                           "с красным углом о том, что по адресу: г. Минск, ул. Интернациональная, 14-5, проживает находящийся в международном розыске "
                                           "гражданин Австрии Штайер А. (инициатор розыска – Дания). Ваши действия?",
+                            is_first_question_in_game=True,
                             question_number=1)
 
     Question.objects.create(game=game,
@@ -95,7 +96,7 @@ def init_questions(apps, schema_editor):
     Answer.objects.create(question=Question.objects.get(question_number=2),
                           answer_text="Совершенные лицом действия в Республике Беларусь являются менее тяжким преступлением",
                           score=0,
-                          next_question=Question.objects.get(question_number=3))
+                          next_question=Question.objects.get(question_number=4))
 
     Answer.objects.create(question=Question.objects.get(question_number=3),
                           answer_text="необходимо осуществить задержание",
@@ -145,8 +146,7 @@ def init_questions(apps, schema_editor):
                           score=-1)
     Answer.objects.create(question=Question.objects.get(question_number=8),
                           answer_text="Опрос лица",
-                          score=-1,
-                          next_question=Question.objects.get(question_number=8))
+                          score=-1)
     Answer.objects.create(question=Question.objects.get(question_number=8),
                           answer_text="Передачу задержанного прокурору района",
                           score=1,
@@ -205,9 +205,9 @@ def init_questions(apps, schema_editor):
                           next_question=Question.objects.get(question_number=14))
 
     Answer.objects.create(question=Question.objects.get(question_number=14),
-                          answer_text="Нет (неверно)",
+                          answer_text="Нет",
                           score=-1)
-    Answer.objects.create(question=Question.objects.get(question_number=13),
+    Answer.objects.create(question=Question.objects.get(question_number=14),
                           answer_text="Да",
                           score=1)
 
